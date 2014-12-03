@@ -1,3 +1,4 @@
+import pickle
 import numpy as np
 import mlpy
 import scipy
@@ -163,8 +164,13 @@ def scorer(classifier, x, y):
     label, proba = classifier.predict(x, n_neighbors=50)
     return roc_auc_score(y, proba)
 
-def classify(train_map, test_map, channel, (start, stop), cross_val=True, full_train=True, predict=True):
+def classify(channel, (start, stop), cross_val=True, full_train=True, predict=True):
     data = AttrTree()
+
+    with open('train_map_long.pkl', 'rb') as f:
+        train_map = pickle.load(f)
+    with open('test_map_long.pkl', 'rb') as f:
+        test_map = pickle.load(f)
 
     splitter = np.ones(len(train_map))
     print "Starting channel %s, time window from %s ms to %s ms." % (channel, str(start), str(stop))
